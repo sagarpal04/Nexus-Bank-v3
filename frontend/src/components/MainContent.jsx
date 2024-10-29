@@ -14,7 +14,6 @@ const MainContent = () => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev < text.length ? prev + 1 : prev));
     }, 100);
-
     return () => clearInterval(interval);
   }, [text.length]);
 
