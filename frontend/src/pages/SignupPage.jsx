@@ -18,21 +18,36 @@ export default function SignupPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // First API call for signup
       const response = await axios.post(
-        "http://localhost:5000/API/signup",
+        "http://localhost:5000/api/signup",
         formData
       );
-      alert(response.data.message);
+
+      // Check if signup was successful before adding transactions
+      if (response.status === 201) {
+        // Second API call to add transactions
+        await axios.post("http://localhost:5000/api/addtransactions", {
+          email: formData.email,
+          balance: formData.balance,
+          type: "DEPOSIT",
+        });
+
+        // Show success message
+        alert(response.data.message);
+      }
     } catch (error) {
-      // Show alert message for error
+      // Show alert message for error, handling case where there's no response
       alert(error.response?.data?.message || "Something went wrong");
+    } finally {
+      // Clear form data after submission attempt
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+        balance: "",
+      });
     }
-    setFormData({
-      name: "",
-      email: "",
-      password: "",
-      balance: "",
-    });
   };
 
   return (
