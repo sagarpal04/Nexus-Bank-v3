@@ -4,7 +4,22 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      backgroundImage: {
+        "gradient-to-tl-custom":
+          "linear-gradient(to top left, #39b385, #9be15d)",
+      },
       colors: {
+        "custom-red-1": "#e52a5a",
+        "custom-red-2": "#ff585f",
+        darkGray: "#333", // Name this color as "darkGray" or any name you prefer
+        "custom-green-1": "#39b385",
+        "custom-green-2": "#9be15d",
+        "custom-red-1": "#e52a5a",
+        "custom-red-2": "#ff585f",
+        grayCustom: "rgb(136, 136, 136)",
+        "yellow-400": "#FFC107",
+        "green-400": "#4CAF50",
+        "red-400": "#F44336",
         customGreen: "#CBD6CC",
         customOrangeDark: "#E3432B",
         customOrangeLight: "#E65640",

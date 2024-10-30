@@ -1,6 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+
 export default function SignupPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    balance: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/API/signup",
+        formData
+      );
+      alert(response.data.message);
+    } catch (error) {
+      // Show alert message for error
+      alert(error.response?.data?.message || "Something went wrong");
+    }
+    setFormData({
+      name: "",
+      email: "",
+      password: "",
+      balance: "",
+    });
+  };
+
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -20,21 +54,23 @@ export default function SignupPage() {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Create an account
             </h1>
-            <form className="space-y-4 md:space-y-6" action="#">
+            <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label
-                  htmlFor="full-name"
+                  htmlFor="name"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Full Name
                 </label>
                 <input
                   type="text"
-                  name="full-name"
-                  id="full-name"
+                  name="name"
+                  id="name"
                   aria-label="Full Name"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Your full name"
+                  value={formData.name}
+                  onChange={handleChange}
                   required
                 />
               </div>
@@ -52,6 +88,8 @@ export default function SignupPage() {
                   aria-label="Email"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="name@company.com"
+                  value={formData.email}
+                  onChange={handleChange}
                   required
                 />
               </div>
@@ -69,23 +107,27 @@ export default function SignupPage() {
                   aria-label="Password"
                   placeholder="Enter password"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  value={formData.password}
+                  onChange={handleChange}
                   required
                 />
               </div>
               <div>
                 <label
-                  htmlFor="initial-deposit"
+                  htmlFor="balance"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Initial Deposit
                 </label>
                 <input
                   type="number"
-                  name="initial-deposit"
-                  id="initial-deposit"
+                  name="balance"
+                  id="balance"
                   aria-label="Initial Deposit"
                   placeholder="Enter amount"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  value={formData.balance}
+                  onChange={handleChange}
                   required
                 />
               </div>
