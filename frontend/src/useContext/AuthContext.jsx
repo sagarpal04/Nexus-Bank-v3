@@ -18,21 +18,21 @@ export function AuthProvider({ children }) {
     let timer;
 
     if (isAuthenticated) {
-      setRemainingTime(60); // Set remaining time to 900 seconds (15 minutes)
+      setRemainingTime(60);
       timer = setInterval(() => {
         setRemainingTime((prevTime) => {
           if (prevTime <= 1) {
             clearInterval(timer);
-            setIsAuthenticated(""); // Reset authentication
-            return 0; // Clear remaining time
+            setIsAuthenticated("");
+            return 0;
           }
-          return prevTime - 1; // Decrement remaining time
+          return prevTime - 1;
         });
-      }, 1000); // Update every second
+      }, 1000);
     }
 
     return () => {
-      clearInterval(timer); // Clean up on unmount
+      clearInterval(timer);
     };
   }, [isAuthenticated]);
 
