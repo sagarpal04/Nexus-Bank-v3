@@ -5,8 +5,12 @@ import ActionButtons from "./ActionButtons";
 import Footer from "./Footer";
 import { useState } from "react";
 import { LogOut } from "lucide-react";
+import { useNavigate, Navigate } from "react-router-dom"; // Import Navigate
+import { useAuth } from "../useContext/AuthContext";
 
 export default function AccountDetails() {
+  const navigate = useNavigate();
+  const { isAuthenticated, setIsAuthenticated } = useAuth();
   const [balance, setBalance] = useState(5267);
   const [transactions, setTransactions] = useState([
     { id: 1, type: "DEPOSIT", date: "2024-10-01T10:30:00.000Z", amount: 5000 },
@@ -131,6 +135,8 @@ export default function AccountDetails() {
     },
   ]);
 
+  console.log(isAuthenticated);
+
   const withdrawAmount = transactions
     .filter((transaction) => transaction.type === "WITHDRAWAL")
     .reduce((acc, transaction) => acc + transaction.amount, 0);
@@ -138,11 +144,13 @@ export default function AccountDetails() {
   const depositAmount = transactions
     .filter((transaction) => transaction.type === "DEPOSIT")
     .reduce((acc, transaction) => acc + transaction.amount, 0);
+
   const IND_CURRENCY_SYMBOL = "₹";
   const name = "Sagar Pal";
-  return (
+
+  return isAuthenticated ? (
     <div className="bg-gray-100 flex justify-center min-h-screen">
-      <div className="w-9/12  my-12">
+      <div className="w-9/12 my-12">
         <div className="mb-10 flex items-center justify-between">
           <p className="text-3xl font-medium text-gray-900 ">
             Welcome Back, {name.split(" ")[0]}
@@ -160,5 +168,7 @@ export default function AccountDetails() {
         <Footer withdrawAmount={withdrawAmount} depositAmount={depositAmount} />
       </div>
     </div>
+  ) : (
+    <Navigate to="/" /> // Use Navigate here
   );
 }
