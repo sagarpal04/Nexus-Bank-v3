@@ -36,16 +36,40 @@ export function login(req, res) {
   });
 }
 
-// export function accountInfo(req, res) {
-//   res.json({ message: "Account Info" });
-// }
+export function accountInfo(req, res) {
+  const { email } = req.body;
+
+  db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database query error" });
+    }
+    console.log(result);
+    if (result.length === 0) {
+      return res.status(404).json({ message: "User does not exist" });
+    } else {
+      const user = result[0];
+      return res.status(200).json({ user: user });
+    }
+  });
+}
+
+export function transactionsHistory(req, res) {
+  const { email } = req.body;
+
+  db.query(
+    "SELECT * FROM transactions WHERE email = ?",
+    [email],
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: "Database query error" });
+      }
+      return res.status(200).json({ transactions: result });
+    }
+  );
+}
 
 // export function updateAccountInfo(req, res) {
 //   res.json({ message: "Update Account Info" });
-// }
-
-// export function transactionsHistory(req, res) {
-//   res.json({ message: "Transaction History" });
 // }
 
 // export function deleteAccount(req, res) {
