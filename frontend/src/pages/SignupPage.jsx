@@ -1,8 +1,10 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { useAuth } from "../useContext/AuthContext";
 export default function SignupPage() {
+  const navigate = useNavigate();
+  const { isAuthenticated, setIsAuthenticated } = useAuth();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -24,7 +26,6 @@ export default function SignupPage() {
         formData
       );
 
-      // Check if signup was successful before adding transactions
       if (response.status === 201) {
         // Second API call to add transactions
         await axios.post("http://localhost:5000/api/addmoney", {
@@ -32,15 +33,11 @@ export default function SignupPage() {
           balance: formData.balance,
           type: "DEPOSIT",
         });
-
-        // Show success message
-        alert(response.data.message);
+        setIsAuthenticated(formData.email);
       }
     } catch (error) {
-      // Show alert message for error, handling case where there's no response
       alert(error.response?.data?.message || "Something went wrong");
     } finally {
-      // Clear form data after submission attempt
       setFormData({
         name: "",
         email: "",
@@ -49,6 +46,12 @@ export default function SignupPage() {
       });
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/accountdetails");
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">

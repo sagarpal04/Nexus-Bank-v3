@@ -1,8 +1,11 @@
-import React, { useState } from "react"; // Import useState
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../useContext/AuthContext";
 
 export default function LoginPage() {
+  const navigate = useNavigate();
+  const { isAuthenticated, setIsAuthenticated } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -20,6 +23,7 @@ export default function LoginPage() {
         "http://localhost:5000/API/login",
         formData
       );
+      setIsAuthenticated(formData.email);
       alert(response.data.message);
     } catch (error) {
       // Show alert message for error
@@ -30,6 +34,11 @@ export default function LoginPage() {
       password: "",
     });
   };
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/accountdetails");
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
