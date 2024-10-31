@@ -27,7 +27,7 @@ export default function SignupPage() {
       // Check if signup was successful before adding transactions
       if (response.status === 201) {
         // Second API call to add transactions
-        await axios.post("http://localhost:5000/api/addtransactions", {
+        await axios.post("http://localhost:5000/api/addmoney", {
           email: formData.email,
           balance: formData.balance,
           type: "DEPOSIT",

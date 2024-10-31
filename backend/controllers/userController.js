@@ -52,7 +52,7 @@ export function login(req, res) {
 //   res.json({ message: "Delete Account" });
 // }
 
-export function addtransactions(req, res) {
+export function addMoney(req, res) {
   const { email, balance, type } = req.body;
 
   db.query(
