@@ -1,7 +1,15 @@
 import React from "react";
-
+import { useAuth } from "../useContext/AuthContext";
 export default function Footer({ withdrawAmount, depositAmount }) {
-  console.log(withdrawAmount, depositAmount);
+  const { remainingTime } = useAuth();
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${String(minutes).padStart(2, "0")}:${String(secs).padStart(
+      2,
+      "0"
+    )}`;
+  };
   return (
     <div className="flex justify-between items-center mt-12 text-gray-700 ">
       <div className="flex gap-5">
@@ -20,7 +28,8 @@ export default function Footer({ withdrawAmount, depositAmount }) {
       </div>
 
       <div className="text-gray-500 text-sm">
-        You will be logged out in <span className="font-semibold">04:15</span>
+        You will be logged out in{" "}
+        <span className="font-semibold">{formatTime(remainingTime)}</span>
       </div>
     </div>
   );
