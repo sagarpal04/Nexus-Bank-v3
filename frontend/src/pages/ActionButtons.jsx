@@ -60,16 +60,6 @@ export default function ActionButtons({ email, setTransactions }) {
       alert("Failed to add money. Please try again.");
     }
   };
-  // const [addMoney, setAddMoney] = useState("");
-  // const onSubmitAddMoney = ()=>{
-  //   const response = await axios.post("http://localhost:5000/api/addmoney", {
-  //     email: formData.email,
-  //     amount: formData.balance,
-  //     type: "DEPOSIT",
-  //   });
-  //   alert(response.data.message);
-  //   setAddMoney("")
-  // }
   return (
     <div className="flex flex-col gap-3">
       <div className="bg-gradient-to-tl from-[#ffb003] to-[#ffcb03] py-7 px-9 rounded-lg flex flex-col">
