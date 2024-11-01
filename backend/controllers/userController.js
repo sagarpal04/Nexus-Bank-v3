@@ -78,11 +78,11 @@ export function accountDetails(req, res) {
 // }
 
 export function addMoney(req, res) {
-  const { email, balance, type } = req.body;
+  const { email, amount, type } = req.body;
 
   db.query(
     "INSERT INTO transactions ( email, type, date, amount) VALUES (?, ?, ?, ?)",
-    [email, type, new Date(), Number(balance)],
+    [email, type, new Date(), Number(amount)],
     (transactionErr) => {
       if (transactionErr) {
         console.log(transactionErr);

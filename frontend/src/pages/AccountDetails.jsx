@@ -85,7 +85,10 @@ export default function AccountDetails() {
         />
         <div className="flex mt-14 gap-4">
           <TransactionList transactions={transactions} />
-          <ActionButtons />
+          <ActionButtons
+            email={isAuthenticated}
+            setTransactions={setTransactions}
+          />
         </div>
         <Footer withdrawAmount={withdrawAmount} depositAmount={depositAmount} />
       </div>

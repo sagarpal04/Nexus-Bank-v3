@@ -30,7 +30,7 @@ export default function SignupPage() {
         // Second API call to add transactions
         await axios.post("http://localhost:5000/api/addmoney", {
           email: formData.email,
-          balance: formData.balance,
+          amount: formData.balance,
           type: "DEPOSIT",
         });
         setIsAuthenticated(formData.email);
