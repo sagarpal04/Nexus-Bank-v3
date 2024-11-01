@@ -20,7 +20,7 @@ export default function LoginPage() {
     e.preventDefault(); // Prevent default form submission behavior
     try {
       const response = await axios.post(
-        "http://localhost:5000/API/login",
+        "http://localhost:5000/api/login",
         formData
       );
       setIsAuthenticated(formData.email);

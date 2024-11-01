@@ -16,9 +16,7 @@ const Header = () => (
         Login
       </Link>
       <Link to={"/signup"}>
-        <Button href="#" aria-label="Sign up">
-          Sign up
-        </Button>
+        <Button>Sign up</Button>
       </Link>
     </div>
   </nav>

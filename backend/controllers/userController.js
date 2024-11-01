@@ -3,10 +3,15 @@ import { randomUUID } from "crypto"; // Import randomUUID from the crypto module
 
 export function signup(req, res) {
   const { name, email, password, balance } = req.body;
+  const formattedName = name
+    .toLowerCase()
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 
   db.query(
     "INSERT INTO users (name, email, password, balance) VALUES (?, ?, ?, ?)",
-    [name, email, password, Number(balance)],
+    [formattedName, email, password, Number(balance)],
     (err, result) => {
       if (err) {
         return res.status(400).json({ message: "User already exists" });
@@ -36,25 +41,8 @@ export function login(req, res) {
   });
 }
 
-export function accountInfo(req, res) {
-  const { email } = req.body;
-
-  db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database query error" });
-    }
-    console.log(result);
-    if (result.length === 0) {
-      return res.status(404).json({ message: "User does not exist" });
-    } else {
-      const user = result[0];
-      return res.status(200).json({ user: user });
-    }
-  });
-}
-
 export function transactionsHistory(req, res) {
-  const { email } = req.body;
+  const { email } = req.query; // Change to req.query if using GET method
 
   db.query(
     "SELECT * FROM transactions WHERE email = ?",
@@ -63,9 +51,22 @@ export function transactionsHistory(req, res) {
       if (err) {
         return res.status(500).json({ message: "Database query error" });
       }
-      return res.status(200).json({ transactions: result });
+      return res.status(200).json({ transactions: result }); // Return all transactions as an array
     }
   );
+}
+
+export function accountDetails(req, res) {
+  const { email } = req.query; // Use req.query for GET requests
+
+  db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database query error" });
+    }
+    return res
+      .status(200)
+      .json({ name: result[0].name, balance: result[0].balance });
+  });
 }
 
 // export function updateAccountInfo(req, res) {
