@@ -1,9 +1,40 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 export default function ActionButtons({ email, setTransactions }) {
+  const navigator = useNavigate();
   const [addMoney, setAddMoney] = useState("");
-  // const [transferTo, setTransferTo] = useState("");
-  // const [amount, setAmount] = useState("");
+  const [deleteEmail, setDeleteEmail] = useState("");
+  const [deleteEmailPassword, setDeleteEmailPassword] = useState("");
+  const onSubmitDelete = async () => {
+    try {
+      // Delete the user account
+      const response = await axios.delete(
+        "http://localhost:5000/api/deleteaccount",
+        {
+          data: {
+            email: deleteEmail,
+            password: deleteEmailPassword,
+          },
+        }
+      );
+
+      // Delete associated transactions
+      await axios.delete(
+        "http://localhost:5000/api/deleteaccounttransactions",
+        {
+          data: {
+            email: deleteEmail,
+          },
+        }
+      );
+
+      navigator("/");
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      alert("Failed to delete account. Please try again.");
+    }
+  };
 
   const onSubmitAddMoney = async () => {
     try {
@@ -107,6 +138,8 @@ export default function ActionButtons({ email, setTransactions }) {
               type="text"
               name="confirmUser"
               id="confirmUser"
+              value={deleteEmail}
+              onChange={(e) => setDeleteEmail(e.target.value)}
               className="outline-none bg-white/40 font-inherit text-sm text-center text-black rounded-lg p-1"
             />
             <label htmlFor="confirmUser" className="text-sm">
@@ -118,13 +151,18 @@ export default function ActionButtons({ email, setTransactions }) {
               type="text"
               name="confirmPin"
               id="confirmPin"
+              value={deleteEmailPassword}
+              onChange={(e) => setDeleteEmailPassword(e.target.value)}
               className="outline-none bg-white/40 font-inherit text-sm text-center text-black rounded-lg p-1"
             />
             <label htmlFor="confirmPin" className="text-sm">
               Confirm PIN
             </label>
           </div>
-          <button className="text-sm self-start bg-white px-4 py-1 rounded-lg flex items-center justify-center">
+          <button
+            onClick={onSubmitDelete}
+            className="text-sm self-start bg-white px-4 py-1 rounded-lg flex items-center justify-center"
+          >
             →
           </button>
         </div>

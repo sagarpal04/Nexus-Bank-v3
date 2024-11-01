@@ -5,6 +5,8 @@ import {
   addMoney,
   transactionsHistory,
   accountDetails,
+  deleteAccount,
+  deleteAccountTransactions,
 } from "../controllers/userController.js";
 const router = express.Router();
 
@@ -13,5 +15,7 @@ router.post("/login", login);
 router.post("/addmoney", addMoney);
 router.get("/transactionshistory", transactionsHistory);
 router.get("/accountdetails", accountDetails);
+router.delete("/deleteaccount", deleteAccount);
+router.delete("/deleteaccounttransactions", deleteAccountTransactions);
 
 export default router;

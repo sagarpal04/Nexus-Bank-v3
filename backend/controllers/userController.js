@@ -69,13 +69,47 @@ export function accountDetails(req, res) {
   });
 }
 
-// export function updateAccountInfo(req, res) {
-//   res.json({ message: "Update Account Info" });
-// }
+// Function to delete a user account
+export function deleteAccount(req, res) {
+  const { email, password } = req.body;
 
-// export function deleteAccount(req, res) {
-//   res.json({ message: "Delete Account" });
-// }
+  db.query("SELECT * FROM users WHERE email = ?", [email], (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Database query error" });
+    }
+
+    if (results.length === 0) {
+      return res.status(400).json({ message: "Email is incorrect" });
+    }
+
+    const user = results[0];
+
+    // Compare the provided password with the stored password
+    if (user.password !== password) {
+      return res.status(400).json({ message: "Password is incorrect" });
+    }
+
+    // Proceed to delete the account
+    db.query("DELETE FROM users WHERE email = ?", [email], (err) => {
+      if (err) {
+        return res.status(500).json({ message: "Database query error" });
+      }
+      return res.status(200).json({ message: "Account deleted" });
+    });
+  });
+}
+
+// Function to delete user transactions
+export function deleteAccountTransactions(req, res) {
+  const { email } = req.body;
+
+  db.query("DELETE FROM transactions WHERE email = ?", [email], (err) => {
+    if (err) {
+      return res.status(500).json({ message: "Database query error" });
+    }
+    return res.status(200).json({ message: "Transactions deleted" });
+  });
+}
 
 export function addMoney(req, res) {
   const { email, amount, type } = req.body;
