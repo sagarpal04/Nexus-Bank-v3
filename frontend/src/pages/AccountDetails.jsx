@@ -87,7 +87,7 @@ export default function AccountDetails() {
           />
         </div>
         <BalanceOverview
-          balance={`${balance}`}
+          balance={balance}
           IND_CURRENCY_SYMBOL={IND_CURRENCY_SYMBOL}
           lastLogin={lastLogin}
         />

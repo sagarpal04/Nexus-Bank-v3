@@ -59,7 +59,11 @@ export default function ActionButtons({
         email: email,
         amount: Number(addMoney) + Number(balance),
       });
-      setBalance((prev) => Number(prev) + Number(addMoney));
+      setBalance((prev) => {
+        const newBalance = Number(prev) + Number(addMoney);
+        return parseFloat(newBalance.toFixed(2)); // Store as a number
+      });
+
       alert(response.data.message);
       setTransactions((prev) => [
         ...prev,
@@ -155,7 +159,7 @@ export default function ActionButtons({
           </div>
           <div className="flex flex-col items-center gap-1">
             <input
-              type="text"
+              type="password"
               name="confirmPin"
               id="confirmPin"
               value={deleteEmailPassword}

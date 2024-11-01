@@ -17,7 +17,10 @@ export default function BalanceOverview({
       </div>
       <div>
         <span className="text-5xl text-[#444444]">
-          {balance.toLocaleString() + IND_CURRENCY_SYMBOL}
+          {balance.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }) + IND_CURRENCY_SYMBOL}
         </span>
       </div>
     </div>

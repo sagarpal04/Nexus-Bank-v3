@@ -18,7 +18,7 @@ const AuthProvider = ({ children }) => {
     let timer;
 
     if (isAuthenticated) {
-      setRemainingTime(60);
+      setRemainingTime(900);
       timer = setInterval(() => {
         setRemainingTime((prevTime) => {
           if (prevTime <= 1) {
