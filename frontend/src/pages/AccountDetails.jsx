@@ -97,6 +97,7 @@ export default function AccountDetails() {
             email={isAuthenticated}
             setTransactions={setTransactions}
             balance={balance}
+            setBalance={setBalance}
           />
         </div>
         <Footer withdrawAmount={withdrawAmount} depositAmount={depositAmount} />

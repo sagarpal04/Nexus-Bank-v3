@@ -3,7 +3,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../useContext/AuthContext";
 
-export default function ActionButtons({ email, setTransactions, balance }) {
+export default function ActionButtons({
+  email,
+  setTransactions,
+  balance,
+  setBalance,
+}) {
   const { setIsAuthenticated, setRemainingTime } = useAuth(); // No need to setIsAuthenticated if you aren't using it
   const navigator = useNavigate();
   const [addMoney, setAddMoney] = useState("");
@@ -54,6 +59,7 @@ export default function ActionButtons({ email, setTransactions, balance }) {
         email: email,
         amount: Number(addMoney) + Number(balance),
       });
+      setBalance((prev) => Number(prev) + Number(addMoney));
       alert(response.data.message);
       setTransactions((prev) => [
         ...prev,
