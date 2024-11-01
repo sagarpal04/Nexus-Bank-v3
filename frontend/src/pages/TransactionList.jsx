@@ -1,6 +1,5 @@
 import React from "react";
 import TransactionItem from "./TransactionItem";
-import { randomUUTID } from "crypto";
 export default function TransactionList({ transactions }) {
   return (
     <div
@@ -10,8 +9,8 @@ export default function TransactionList({ transactions }) {
       [&::-webkit-scrollbar-thumb]:rounded-full
       [&::-webkit-scrollbar-thumb]:bg-gray-300 bg-white flex-1"
     >
-      {transactions.map((transaction) => (
-        <TransactionItem key={randomUUTID()} {...transaction} />
+      {transactions.map((transaction, index) => (
+        <TransactionItem key={index} {...transaction} />
       ))}
     </div>
   );
