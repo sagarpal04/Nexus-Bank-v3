@@ -7,6 +7,7 @@ import {
   accountDetails,
   deleteAccount,
   deleteAccountTransactions,
+  updateBalance,
 } from "../controllers/userController.js";
 const router = express.Router();
 
@@ -17,5 +18,6 @@ router.get("/transactionshistory", transactionsHistory);
 router.get("/accountdetails", accountDetails);
 router.delete("/deleteaccount", deleteAccount);
 router.delete("/deleteaccounttransactions", deleteAccountTransactions);
+router.post("/updatebalance", updateBalance);
 
 export default router;

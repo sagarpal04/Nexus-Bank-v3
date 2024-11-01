@@ -5,12 +5,12 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 const AuthContext = createContext();
 
 // Custom hook to use the auth context
-export function useAuth() {
+export const useAuth = () => {
   return useContext(AuthContext);
-}
+};
 
 // Auth Provider component
-export function AuthProvider({ children }) {
+const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState("");
   const [remainingTime, setRemainingTime] = useState(0); // State for remaining time
 
@@ -38,9 +38,17 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, setIsAuthenticated, remainingTime }}
+      value={{
+        isAuthenticated,
+        setIsAuthenticated,
+        remainingTime,
+        setRemainingTime,
+      }}
     >
       {children}
     </AuthContext.Provider>
   );
-}
+};
+
+// Export AuthProvider as default and useAuth as named export
+export default AuthProvider;

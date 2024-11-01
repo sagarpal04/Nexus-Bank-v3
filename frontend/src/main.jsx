@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignupPage from "./pages/SignupPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import AccountDetails from "./pages/AccountDetails.jsx";
-import { AuthProvider } from "./useContext/AuthContext.jsx";
+import AuthProvider from "./useContext/AuthContext.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>

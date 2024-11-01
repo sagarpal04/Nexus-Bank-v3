@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-export default function ActionButtons({ email, setTransactions }) {
+import { useAuth } from "../useContext/AuthContext";
+
+export default function ActionButtons({ email, setTransactions, balance }) {
+  const { setIsAuthenticated, setRemainingTime } = useAuth(); // No need to setIsAuthenticated if you aren't using it
   const navigator = useNavigate();
   const [addMoney, setAddMoney] = useState("");
   const [deleteEmail, setDeleteEmail] = useState("");
@@ -28,6 +31,10 @@ export default function ActionButtons({ email, setTransactions }) {
           },
         }
       );
+      setIsAuthenticated("");
+      setRemainingTime(0);
+      setDeleteEmail("");
+      setDeleteEmailPassword("");
 
       navigator("/");
     } catch (error) {
@@ -43,12 +50,16 @@ export default function ActionButtons({ email, setTransactions }) {
         amount: addMoney,
         type: "DEPOSIT",
       });
+      await axios.post("http://localhost:5000/api/updatebalance", {
+        email: email,
+        amount: Number(addMoney) + Number(balance),
+      });
       alert(response.data.message);
       setTransactions((prev) => [
         ...prev,
         {
           type: "DEPOSIT",
-          amount: parseFloat(addMoney),
+          amount: parseFloat(addMoney).toFixed(2),
           date: new Date(),
           email: email,
         },

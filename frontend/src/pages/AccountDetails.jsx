@@ -11,7 +11,7 @@ import axios from "axios";
 
 export default function AccountDetails() {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth(); // No need to setIsAuthenticated if you aren't using it
+  const { isAuthenticated, setIsAuthenticated, setRemainingTime } = useAuth(); // No need to setIsAuthenticated if you aren't using it
   const [balance, setBalance] = useState(0);
   const [name, setName] = useState("");
   const [transactions, setTransactions] = useState([]);
@@ -76,7 +76,15 @@ export default function AccountDetails() {
           <p className="text-3xl font-medium text-gray-900 ">
             Welcome Back, {name.split(" ")[0]}
           </p>
-          <LogOut size={30} />
+          <LogOut
+            className="cursor-pointer"
+            size={30}
+            onClick={() => {
+              setIsAuthenticated("");
+              setRemainingTime(0);
+              navigate("/");
+            }}
+          />
         </div>
         <BalanceOverview
           balance={`${balance}`}
@@ -88,6 +96,7 @@ export default function AccountDetails() {
           <ActionButtons
             email={isAuthenticated}
             setTransactions={setTransactions}
+            balance={balance}
           />
         </div>
         <Footer withdrawAmount={withdrawAmount} depositAmount={depositAmount} />

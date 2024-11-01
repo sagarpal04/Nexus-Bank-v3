@@ -128,3 +128,20 @@ export function addMoney(req, res) {
     }
   );
 }
+
+export function updateBalance(req, res) {
+  const { email, amount } = req.body;
+  db.query(
+    "UPDATE users SET balance = ? WHERE email = ?",
+    [amount, email],
+    (err) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ error: "Error updating balance" });
+      } else {
+        console.log("Balance updated");
+        res.json({ message: "Balance updated successfully" });
+      }
+    }
+  );
+}
