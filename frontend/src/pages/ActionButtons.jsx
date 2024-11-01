@@ -14,6 +14,45 @@ export default function ActionButtons({
   const [addMoney, setAddMoney] = useState("");
   const [deleteEmail, setDeleteEmail] = useState("");
   const [deleteEmailPassword, setDeleteEmailPassword] = useState("");
+  const [transferToEmail, setTransferToEmail] = useState("");
+  const [transferToAmount, setTransferToAmount] = useState("");
+
+  const onSubmitTransfer = async () => {
+    try {
+      // Check if user balance is sufficient
+      if (Number(addMoney) > Number(balance)) {
+        alert("Insufficient balance.");
+        return;
+      }
+
+      const response = await axios.post("http://localhost:5000/api/transfer", {
+        email: transferToEmail,
+        amount: transferToAmount, // Ensure to use transferToAmount for the transaction
+        user: email, // Use your source of the user's email
+      });
+      setTransactions((prev) => [
+        ...prev,
+        {
+          type: "WITHDRAWAL",
+          amount: parseFloat(transferToAmount).toFixed(2),
+          date: new Date(),
+          email: email,
+        },
+      ]);
+
+      setBalance((prev) => {
+        const newBalance = Number(prev) - Number(transferToAmount);
+        return parseFloat(newBalance.toFixed(2)); // Store as a number
+      });
+      alert(response.data.message);
+    } catch (error) {
+      console.error("Error transferring money:", error);
+      alert("Failed to transfer money. Please try again.");
+    } finally {
+      setTransferToEmail("");
+      setTransferToAmount("");
+    }
+  };
   const onSubmitDelete = async () => {
     try {
       // Delete the user account
@@ -87,12 +126,12 @@ export default function ActionButtons({
         <p className="text-lg font-semibold mb-4 text-darkGray">
           Transfer money
         </p>
-        <div className="flex gap-3 items-starts">
+        <div className="flex gap-3 items-start">
           <div className="flex flex-col items-center gap-1">
             <input
               type="text"
-              name="transferTo"
-              id="transferTo"
+              value={transferToEmail}
+              onChange={(e) => setTransferToEmail(e.target.value)}
               className="outline-none bg-white/40 font-inherit text-sm text-center text-black rounded-lg p-1"
             />
             <label htmlFor="transferTo" className="text-sm">
@@ -102,15 +141,18 @@ export default function ActionButtons({
           <div className="flex flex-col items-center gap-1">
             <input
               type="text"
-              name="amount"
-              id="amount"
+              value={transferToAmount}
+              onChange={(e) => setTransferToAmount(e.target.value)}
               className="outline-none bg-white/40 font-inherit text-sm text-center text-black rounded-lg p-1"
             />
             <label htmlFor="amount" className="text-sm">
               Amount
             </label>
           </div>
-          <button className="text-sm self-start bg-white px-4 py-1 rounded-lg flex items-center justify-center">
+          <button
+            onClick={onSubmitTransfer}
+            className="text-sm self-start bg-white px-4 py-1 rounded-lg flex items-center justify-center"
+          >
             →
           </button>
         </div>

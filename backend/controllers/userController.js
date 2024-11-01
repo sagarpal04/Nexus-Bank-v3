@@ -145,3 +145,90 @@ export function updateBalance(req, res) {
     }
   );
 }
+export function transferTo(req, res) {
+  const { email, amount, user } = req.body;
+
+  // Check if the user exists before proceeding
+  db.query("SELECT * FROM users WHERE email = ?", [email], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Error checking user" });
+    }
+
+    if (results.length === 0) {
+      // User not found
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Check if user has sufficient balance
+    db.query(
+      "SELECT balance FROM users WHERE email = ?",
+      [user],
+      (err, userResults) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ error: "Error fetching user balance" });
+        }
+
+        const currentBalance = userResults[0]?.balance || 0;
+        if (currentBalance < amount) {
+          return res.status(400).json({ message: "Insufficient balance." });
+        }
+
+        // Proceed with transaction if user exists and has sufficient balance
+        db.query(
+          "INSERT INTO transactions (email, type, date, amount) VALUES (?, ?, ?, ?)",
+          [email, "DEPOSIT", new Date(), Number(amount)],
+          (transactionErr) => {
+            if (transactionErr) {
+              console.log(transactionErr);
+              return res
+                .status(500)
+                .json({ error: "Error creating transaction entry" });
+            }
+          }
+        );
+
+        db.query(
+          "UPDATE users SET balance = balance + ? WHERE email = ?",
+          [amount, email],
+          (err) => {
+            if (err) {
+              console.error(err);
+              return res.status(500).json({ error: "Error updating balance" });
+            }
+          }
+        );
+
+        // Withdraw from the sender's account
+        db.query(
+          "INSERT INTO transactions (email, type, date, amount) VALUES (?, ?, ?, ?)",
+          [user, "WITHDRAWAL", new Date(), Number(amount)],
+          (transactionErr) => {
+            if (transactionErr) {
+              console.log(transactionErr);
+              return res
+                .status(500)
+                .json({ error: "Error creating transaction entry" });
+            }
+          }
+        );
+
+        db.query(
+          "UPDATE users SET balance = balance - ? WHERE email = ?",
+          [amount, user],
+          (err) => {
+            if (err) {
+              console.error(err);
+              return res.status(500).json({ error: "Error updating balance" });
+            } else {
+              return res.json({
+                message: "Transaction added successfully and balance updated",
+              });
+            }
+          }
+        );
+      }
+    );
+  });
+}
